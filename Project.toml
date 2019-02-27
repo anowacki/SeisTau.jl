@@ -1,0 +1,16 @@
+name = "SeisTau"
+uuid = "802e1830-4752-5daf-add9-2f2a4d2e763c"
+authors = ["Andy Nowacki <a.nowacki@leeds.ac.uk>"]
+version = "0.1.0"
+
+[deps]
+Geodesics = "6aaf26a4-c633-11e8-35ae-8904cb805353"
+SAC = "03de775e-c638-11e8-38ea-6915ef5cdf5f"
+Seis = "dd80f4d8-c2f6-58bd-9bd3-4635f134261d"
+TauPy = "fa53487c-c63f-11e8-170c-e7abdb8d2806"
+
+[extras]
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[targets]
+test = ["Test"]
