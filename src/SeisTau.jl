@@ -45,6 +45,19 @@ function Seis.add_picks!(t::AbstractTrace, phase::AbstractString="ttall"; model=
 end
 
 """
+    path(t, phase="all"; model="iasp91", kwargs...) -> phases::Vector{TauPy.PhaseGeog}
+
+Return ray paths for the geometry specified in the `Trace` t for the 1D Earth `model`,
+for arrivals with a name matching `phase`.
+
+Available models are: $(TauPy.available_models()).
+"""
+function path(t::AbstractTrace, phase; model="iasp91", kwargs...)
+    _check_headers_taup(t)
+    TauPy.path(t.evt.lon, t.evt.lat, t.evt.dep, t.sta.lon, t.sta.lat, phase; model=model, kwargs...)
+end
+
+"""
     travel_time(t, phase="all"; model="iasp91") -> phases::Vector{TauPy.Phase}
 
 Return travel times for the geometry specified in the `Trace` `t` for the 1D

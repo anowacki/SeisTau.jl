@@ -1,7 +1,7 @@
 name = "SeisTau"
 uuid = "802e1830-4752-5daf-add9-2f2a4d2e763c"
 authors = ["Andy Nowacki <a.nowacki@leeds.ac.uk>"]
-version = "0.1.0"
+version = "0.2.0"
 
 [deps]
 Geodesics = "6aaf26a4-c633-11e8-35ae-8904cb805353"
