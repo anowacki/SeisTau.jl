@@ -24,19 +24,20 @@ Seis.add_pick!(t::AbstractTrace, p::Union{TauPy.Phase,TauPy.PhaseGeog},
     name=p.name) = add_pick!(t, p.time, name)
 
 """
-    add_picks!(t, phase; model="iasp91", exact=false)
+    add_picks!(t, phase; model="iasp91", exact=false, sphere=false)
 
 Add travel time picks to the trace `t` for the 1D Earth `model`, for arrivals
 with a name matching `phase`.
 
 If `exact` is `true`, only phases which are an exact match for `phase` will
-be added.
+be added.  If `sphere` is `true`, the assume the Earth is spherical.
 
 Available models are: $(TauPy.available_models()).
 """
-function Seis.add_picks!(t::AbstractTrace, phase::AbstractString="ttall"; model="iasp91", exact=false)
+function Seis.add_picks!(t::AbstractTrace, phase::AbstractString="ttall";
+        model="iasp91", exact=false, sphere=false)
     _check_headers_taup(t)
-    arrivals = travel_time(t, phase; model=model)
+    arrivals = travel_time(t, phase; model=model, sphere=sphere)
     for arr in arrivals
         exact && arr.name != phase && continue
         Seis.add_pick!(t, arr.time, arr.name)
@@ -51,6 +52,8 @@ Return ray paths for the geometry specified in the `Trace` t for the 1D Earth `m
 for arrivals with a name matching `phase`.
 
 Available models are: $(TauPy.available_models()).
+
+Note that TauPy only computes geographic paths for a spherical Earth.
 """
 function path(t::AbstractTrace, phase; model="iasp91", kwargs...)
     _check_headers_taup(t)
@@ -58,25 +61,25 @@ function path(t::AbstractTrace, phase; model="iasp91", kwargs...)
 end
 
 """
-    travel_time(t, phase="all"; model="iasp91") -> phases::Vector{TauPy.Phase}
+    travel_time(t, phase="all"; model="iasp91", sphere=false) -> phases::Vector{TauPy.Phase}
 
 Return travel times for the geometry specified in the `Trace` `t` for the 1D
 Earth `model`, for arrivals with a name matching `phase`.
 
 Available models are: $(TauPy.available_models()).
 """
-function travel_time(t::AbstractTrace, phase::AbstractString; model="iasp91", kwargs...)
+function travel_time(t::AbstractTrace, phase::AbstractString; model="iasp91", sphere=false, kwargs...)
     _check_headers_taup(t)
-    TauPy.travel_time(t.evt.dep, distance_deg(t), phase; model=model, kwargs...)
+    TauPy.travel_time(t.evt.dep, distance_deg(t, sphere=sphere), phase; model=model, kwargs...)
 end
 
 """
-    travel_time(t, model="iasp91") -> ::Vector{Vector{TauPy.Phase}}
+    travel_time(t, model="iasp91", sphere=false) -> ::Vector{Vector{TauPy.Phase}}
 
 Return the list of `TauPy.Phase`s associated with each travel time pick in `t`.
 """
-travel_time(t::AbstractTrace; model::AbstractString="iasp91") =
-    [travel_time(t, name; model=model) for (_, name) in picks(t) if name[1] in ("p", "s", "P", "S")]
+travel_time(t::AbstractTrace; model::AbstractString="iasp91", sphere=false) =
+    [travel_time(t, name; model=model, sphere=sphere) for (_, name) in picks(t) if name[1] in ("p", "s", "P", "S")]
 
 "Throw an error if a Trace doesn't contain the right headers to call TauPy.travel_time."
 _check_headers_taup(t::AbstractTrace) = any(ismissing,
