@@ -16,7 +16,16 @@ using Test, Seis, SeisTau
                 @test travel_times(t) == []
                 t.picks.P = (0, "P")
                 @test travel_times(t) == [travel_time(t, "P")]
-                t.picks.X = 1
+                t′ = deepcopy(t)
+                # Ignore unnamed picks
+                t′.picks.X = 1
+                @test travel_times(t′) == travel_times(t)
+                # Ignore empty but not missing names
+                t′.picks.S = 2, ""
+                @test travel_times(t′) == travel_times(t)
+                # Ignore picks with the wrong kind of name
+                t′.picks.sS = 3, "asS"
+                @test travel_times(t′) == travel_times(t)
             end
             @testset "Default phases" begin
                 @test travel_time(t) == travel_time(t, "ttall")
@@ -31,6 +40,7 @@ using Test, Seis, SeisTau
             t.evt.lon, t.evt.lat, t.evt.dep = 0, 0, 0
             t.sta.lon, t.sta.lat = 0, 80
             @test path(t) == path(t, "ttall")
+            @test path(t) == path(t.evt, t.sta)
             arr = path(t, "P")
             @test length(arr) == 1
             @test arr[1].name == "P"

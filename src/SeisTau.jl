@@ -2,7 +2,7 @@
 # SeisTau
 
 SeisTau integrates the [TauPy](https://github.com/anowacki/TauPy.jl) and
-[Seis](ttps://github.com/anowacki/Seis.jl) packages, allowing one to easily
+[Seis](https://github.com/anowacki/Seis.jl) packages, allowing one to easily
 use seismic travel time predictions for 1D Earth models with `Seis.Trace`s,
 `Seis.Event`s and `Seis.Station`s.
 """
@@ -107,7 +107,8 @@ end
 Return the list of `TauPy.Phase`s associated with each travel time pick in `t`.
 """
 travel_times(t::AbstractTrace; model::AbstractString="iasp91", sphere=false) =
-    [travel_time(t, name; model=model, sphere=sphere) for (_, name) in picks(t) if name[1] in ('p', 's', 'P', 'S')]
+    [travel_time(t, name; model=model, sphere=sphere)
+     for (_, name) in picks(t) if name !== missing && occursin(r"^[psPS]", name)]
 
 "Throw an error if a Trace doesn't contain the right headers to call TauPy.travel_time."
 _check_headers_taup(evt::GeogEvent, sta::GeogStation) = any(ismissing,
