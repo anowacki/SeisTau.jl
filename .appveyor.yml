@@ -10,8 +10,10 @@ platform:
 # (tests will run but not make your overall status red)
 matrix:
   allow_failures:
-  - julia_version: nightly
-  - x86
+    - julia_version: nightly
+    # Allow 32-bit Windows to fail as SeisIO doesn't support it:
+    #     https://github.com/jpjones76/SeisIO.jl/issues/44
+    - platform: x86
 
 branches:
   only:
