@@ -18,6 +18,8 @@ after_success:
 
 jobs:
   allow_failures:
+    # TODO: Remove when zlib error no longer present on Travis
+    - julia: 1.0
     - julia: nightly
 
 before_install:
