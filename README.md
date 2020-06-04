@@ -1,5 +1,10 @@
 # SeisTau.jl
 
+## Build status
+[![Build Status](https://travis-ci.org/anowacki/SeisTau.jl.svg?branch=master)](https://travis-ci.org/anowacki/SeisTau.jl)
+[![Build status](https://ci.appveyor.com/api/projects/status/n2ggp9fsxx59jnoh?svg=true)](https://ci.appveyor.com/project/AndyNowacki/seistau-jl)
+[![Coverage Status](https://coveralls.io/repos/github/anowacki/SeisTau.jl/badge.svg?branch=master)](https://coveralls.io/github/anowacki/SeisTau.jl?branch=master)
+
 ## Using
 
 SeisTau integrates the [TauPy](https://github.com/anowacki/TauPy.jl) and
