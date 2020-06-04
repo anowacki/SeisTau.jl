@@ -21,4 +21,4 @@ jobs:
     - julia: nightly
 
 before_install:
-  - julia -e 'import Pkg; Pkg.pkg"add https://github.com/anowacki/Geodesics.jl https://github.com/anowacki/TauPy.jl https://github.com/anowacki/Seis.jl"'
+  - julia -e 'ENV["PYTHON"] = ""; import Pkg; Pkg.pkg"add https://github.com/anowacki/Geodesics.jl https://github.com/anowacki/TauPy.jl https://github.com/anowacki/Seis.jl"'
